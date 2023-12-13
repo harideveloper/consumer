@@ -1,0 +1,36 @@
+# Default values for base-consumer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+consumer:
+  enabled: true
+  
+  KAFKA_CLIENT_ID: "rtdp-producer"
+  KAFKA_SERVERS: "pkc-l6wr6.europe-west2.gcp.confluent.cloud:9092"
+  KAFKA_PORT: "9092"
+  KAFKA_SASL_MECHANISM: "plain"
+  KAFKA_SASL_USERNAME: "ZOYPXT3CJTZMV4VF"
+  KAFKA_SASL_PASSWORD : "XKhm/EP4hRG+Egt2aG+CIj1bFYfS6ie9PFxng6n6v3I5bQ8R52D2DL2nfG0Og6lm"
+  KAFKA_CONSUMER_GRP: "rtdp-consumer-group"
+  KAFKA_TOPIC: "rtdp-topic"
+
+  auth:
+    enabled: false
+
+replicaCount: 1
+image:
+  repository: hari5115/stream-producer
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "0.0.3"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,51 @@
+# templates/consumer-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "base-consumer.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "base-consumer.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "base-consumer.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: KAFKA_CLIENT_ID
+              value: "{{ .Values.consumer.KAFKA_CLIENT_ID }}"
+            - name: KAFKA_SERVERS
+              value: "{{ .Values.consumer.KAFKA_SERVERS }}"
+            - name: KAFKA_PORT
+              value: "{{ .Values.consumer.KAFKA_PORT }}"
+            - name: KAFKA_SASL_MECHANISM
+              value: "{{ .Values.consumer.KAFKA_SASL_MECHANISM }}"
+            - name: KAFKA_TOPIC
+              value: "{{ .Values.consumer.KAFKA_TOPIC }}"
+            - name: KAFKA_CONSUMER_GRP
+              value: "{{ .Values.consumer.KAFKA_CONSUMER_GRP }}"
+            {{- if .Values.consumer.auth.enabled }}
+            - name: KAFKA_SASL_PASSWORD
+              value: "{{ .Values.consumer.KAFKA_SASL_PASSWORD }}"
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
